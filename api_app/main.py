@@ -4,8 +4,8 @@ import requests
 import os
 from dotenv import load_dotenv
 from api_app.haggingface_client import analyse_sentiment
-
-from jose import jwt,JWTError
+from jose import jwt
+from api_app.auth import create_token,verify_token
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ HF_API_TOKEN = os.getenv('HUGGINGFACE_API_TOKEN')
 # Configuration de JWT
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 
 fake_user = {
     
@@ -59,45 +59,49 @@ def get_sentiment(label):
 
 @app.post("/login") 
 def verify_info_login(login : User) :
-     if login.username == fake_user["username"] and login.pwd == fake_user["password"] :
-         usrtoken = jwt.encode({},key=SECRET_KEY,algorithm=ALGORITHM)
-         return usrtoken
+    
+     usertoken = create_token(login) 
+     if usertoken is not None :
+         return usertoken
      else :
          return { "message" : "Access Failed "}
 
     
 
-@app.get('/verify') 
-def verify_token(token : str = Header()):
-  try:
-      token_decode = jwt.decode(token=token,key=SECRET_KEY,algorithms=[ALGORITHM])
-      return token_decode
-  except JWTError:
-      raise HTTPException(status_code=401,detail='Token lli 3titi invalide azin')
+# @app.get('/verify') 
+# def verify_token(token : str = Header()):
+#   try:
+#       token_decoded = jwt.decode(token=token,key=SECRET_KEY,algorithms=[ALGORITHM])
+#       return token_decoded
+#   except :
+#       raise HTTPException(status_code=401,detail='Token Invalide azin')
 
 
-# # Endpoint Post /predict Protected with JWT
-# @app.post("/predict_protected")
-# async def predict_sentiment(request: TextInput, new_user : str = Depends(verify_token)):
-#     text = request.text
-#     if not text:
-#         raise HTTPException(status_code=400, detail="Le champ 'text' ne peut pas être vide.")
+# Endpoint Post /predict Protected with JWT
+@app.post("/predict_protected",response_model=SentimentResponse)
+async def predict_sentiment(request: TextInput, new_user : str = Depends(verify_token)):
+    text = request.text
+    if not text:
+        raise HTTPException(status_code=400, detail="Le champ 'text' ne peut pas être vide.")
     
-#     response = analyse_sentiment(text)
-#     if not isinstance(response, list):
-#       return response        # renvoie l’erreur HF directement
+    response = analyse_sentiment(text)
+    if not isinstance(response, list):
+      return response        # renvoie l’erreur HF directement
    
 
-#     top_prediction = response[0][0] 
+    top_prediction = response[0][0] 
     
-#     # Extraire label et score
-#     label = top_prediction.get("label")
+    # Extraire label et score
+    label = top_prediction.get("label")
    
-#     score = get_star(label)
-#     semntiment  = get_sentiment(label)
-#     print(semntiment)
-#     print(score)
-#     return {"message": "Khadija, you’re a shining star"}
+    score = get_star(label)
+    semntiment  = get_sentiment(label)
+    
+    return SentimentResponse (
+            text=request.text,
+            sentiment=semntiment,
+            score=score
+        )
 
 
 # endpoint Post /predict
