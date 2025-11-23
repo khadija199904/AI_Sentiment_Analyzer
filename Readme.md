@@ -23,10 +23,9 @@ Ce répertoire contient le code source de l'API backend. Il s'agit d'une micro-A
 
 ### Installation Locale
 
-1.  **Clonez le dépôt** (si ce n'est pas déjà fait) et naviguez dans le dossier du backend.
+1.  **Clonez le dépôt** (si ce n'est pas déjà fait) 
     ```bash
     git clone <URL_DU_PROJET>
-    cd <NOM_DU_PROJET>/backend/
     ```
 
 2.  **Créez un environnement virtuel et activez-le**
@@ -60,5 +59,5 @@ Ce répertoire contient le code source de l'API backend. Il s'agit d'une micro-A
 Une fois l'installation et la configuration terminées, vous pouvez lancer le serveur de développement avec Uvicorn.
 
 ```bash
-# La commande doit être lancée depuis la racine du dossier backend
-uvicorn app.main:app --reload
+uvicorn api_app.main:app --reload
+```
