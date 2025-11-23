@@ -34,6 +34,20 @@ AI_Sentimant_Analyzer/
 -   **Support Docker** : Fichier `Dockerfile` pour une conteneurisation facile.
 -   **Tests Unitaires** : Tests intégrés avec `Pytest`.
 
+### Bien sûr ! Voici la version formatée en Markdown. Vous pouvez la copier-coller directement.
+
+code
+Markdown
+download
+content_copy
+expand_less
+### Workflow d'Authentification JWT 
+
+1.  **Connexion** : L'utilisateur envoie son email et son mot de passe au serveur. Si les informations sont correctes, le serveur lui renvoie un **jeton (JWT)** unique et sécurisé. Le navigateur le sauvegarde.
+
+2.  **Requête Protégée** : Pour accéder à une page protégée, le navigateur envoie la requête en joignant automatiquement le **jeton JWT** (comme un badge d'accès).
+
+3.  **Vérification** : Le serveur reçoit la requête, vérifie que le jeton est valide (ni faux, ni expiré). Si c'est bon, il donne l'accès à la page. Sinon, il le refuse.
 
 ## 1. Guide d'Installation
 
@@ -82,3 +96,72 @@ Une fois l'installation et la configuration terminées, vous pouvez lancer le se
 ```bash
 uvicorn api_app.main:app --reload
 ```
+
+## Tester les Endpoints avec Postman
+
+Pour vérifier que l'API fonctionne correctement, vous pouvez utiliser [Postman](https://www.postman.com/downloads/). Voici comment tester les deux endpoints principaux : `POST /login` et `POST /predict`.
+
+### Prérequis
+-   Avoir Postman installé.
+-   S'assurer que le serveur backend est en cours d'exécution (par exemple, sur `http://localhost:5000`).
+
+---
+
+### 1. Tester l'Endpoint de Connexion (`/login`)
+
+Cet endpoint permet à un utilisateur de s'authentifier et de recevoir un jeton JWT en retour.
+
+**Résultat attendu :**
+
+*   **Réponse réussie :**
+    ![Réponse réussie de /login avec un token JWT](/images/Postman_test_login.png.png)
+
+ **Important : Copiez la valeur du `token` reçu.**
+
+---
+
+### 2. Tester l'Endpoint (`/predict`)
+
+
+**Résultat attendu :**
+
+*   **Réponse réussie de l'endpoint :**
+    ![Réponse réussie de /predict avec le sentiment et le score](/images/Postman_test_predict.png.png)
+
+---
+
+## Tests Backend
+
+Pour lancer **tous les tests** (unitaires et API) :
+
+```bash
+python -m pytest -v
+```
+## Docker Backend
+Pour créer et lancer le container Docker du backend :
+# Depuis le dossier api_app
+```bash
+docker build -t sentiment-backend .
+docker run -p 8000:8000 sentiment-backend
+```
+---
+
+## Frontend
+
+L'application **AI Sentiment Analyzer** dispose d'un **frontend séparé** développé en **React.js**.  
+Pour utiliser l'application complète, vous pouvez consulter le **repo frontend** ici :  
+[Frontend Repository](https://github.com/khadija199904/AI_Sentiment_Analyzer_frontend)
+
+> Le frontend interagit avec ce backend pour afficher les résultats d'analyse de sentiment en temps réel.
+
+---
+
+
+## Auteur
+
+**Nom :** KHADIJA ELABBIOUI  
+**Email :** khadija.elabbioui1999@gmail.com  
+**LinkedIn :** [linkedin.com/in/khadija-elabbioui](https://www.linkedin.com/in/khadija-elabbioui-308499216/)  
+**GitHub :** [github.com/ton-github](https://github.com/khadija199904)
+
+> N'hésitez pas à me contacter pour toute question ou suggestion concernant ce projet.
