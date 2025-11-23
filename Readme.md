@@ -2,6 +2,26 @@
 
 Ce répertoire contient le code source de l'API backend. Il s'agit d'une micro-API construite avec **FastAPI** qui fournit un service d'analyse de sentiments sécurisé par authentification JWT et connecté à l'API d'inférence de Hugging Face.
 
+## Structure de Backend
+```bash
+AI_Sentimant_Analyzer/
+│
+├── api_app/                  # Code principal de l'API
+│   ├── __init__.py
+│   ├── auth.py               # Gestion JWT / authentification
+│   ├── huggingFace_client.py # Intégration Hugging Face Inference API
+│   ├── main.py               # Application FastAPI et endpoints
+│   ├── schema.py             # Schémas Pydantic (User, etc.)
+│   └── Dockerfile            # Dockerfile pour le backend
+│
+├── tests/                    
+│   ├── test_api.py           # Tests endpoints FastAPI
+│   └── test_unit.py          # Tests unitaires 
+│
+├── .gitignore                
+├── requirements.txt          
+└── README.md                 
+```
 ## Fonctionnalités 
 -   **Classification de Sentiment** : Le score retourné par Hugging Face est simplifié en trois catégories :
     -   `negatif` (pour les scores 1 ou 2)
@@ -13,6 +33,7 @@ Ce répertoire contient le code source de l'API backend. Il s'agit d'une micro-A
 -   **Gestion des Erreurs** : Gestion robuste des erreurs potentielles lors de l'appel au service externe.
 -   **Support Docker** : Fichier `Dockerfile` pour une conteneurisation facile.
 -   **Tests Unitaires** : Tests intégrés avec `Pytest`.
+
 
 ## 1. Guide d'Installation
 
@@ -56,7 +77,7 @@ Ce répertoire contient le code source de l'API backend. Il s'agit d'une micro-A
 
 ## Lancement du Serveur
 
-Une fois l'installation et la configuration terminées, vous pouvez lancer le serveur de développement avec uvicorn.
+Une fois l'installation et la configuration terminées, vous pouvez lancer le serveur de développement avec Uvicorn.
 
 ```bash
 uvicorn api_app.main:app --reload
